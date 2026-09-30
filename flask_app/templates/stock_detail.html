@@ -1,0 +1,74 @@
+{% extends "header.html" %} {% block content %}
+
+{% if error_msg %}
+  <div class="w-full flex items-center justify-center text-center" style="min-height: calc(100vh - 90px); transform: translateY(-15vh);">
+    <b class="text-red-400">
+      {{ error_msg | safe }}
+    </b>
+  </div>
+{% endif %}
+
+{% if stock %}
+
+{# Display card for the stock details #}
+<div class="movie-container text-true-black">
+  <div class="movie-info">
+    <div class="movie-title">{{ stock.name }}
+      <p style="color: black;" class="movie-date"> &middot; {{ stock.symbol }} </p>
+    </div>
+
+    <table style="background-color: rgb(253 186 116); color: black;" class="mt-4 w-full border border-black text-sm bg-white bg-opacity-80 overflow-hidden shadow">
+      <tbody>
+        <tr><td class="px-4 py-2 font-bold border border-black">Name:</td><td class="px-4 py-2 border border-black">{{ stock.name }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Symbol:</td><td class="px-4 py-2 border">{{ stock.symbol }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Exchange:</td><td class="px-4 py-2 border">{{ stock.exchange }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Currency:</td><td class="px-4 py-2 border">{{ stock.currency }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Datetime:</td><td class="px-4 py-2 border">{{ stock.datetime }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Open:</td><td class="px-4 py-2 border">{{ stock.open }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">High:</td><td class="px-4 py-2 border">{{ stock.high }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Low:</td><td class="px-4 py-2 border">{{ stock.low }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Close:</td><td class="px-4 py-2 border">{{ stock.close }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Volume:</td><td class="px-4 py-2 border">{{ stock.volume }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Previous Close:</td><td class="px-4 py-2 border">{{ stock.previous_close }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Change:</td><td class="px-4 py-2 border">{{ stock.change_percent }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Average Volume:</td><td class="px-4 py-2 border">{{ stock.average_volume }}</td></tr>
+        <tr><td class="px-4 py-2 font-bold border">Is this stock market open:</td><td class="px-4 py-2 border">{{ stock.is_market_open }}</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  {# everyone's watched stocks #}
+  <div class="reviews">
+    <h1 class="reviews-title"> Watchers
+      <small style="color: black;" class="reviews-count"> &middot; {{ watchers | length }} watches </small>
+    </h1>
+
+    {% if current_user.is_authenticated %}
+      <div class="container mx-auto mb-4">
+        <form method="POST" action="{{ url_for('stocks.watch_stock', stock_id=stock.symbol) }}" class="review-form">
+          {{ form.csrf_token }}
+          {{ form.submit(class="review-button text-white") }}
+        </form>
+      </div>
+    {% endif %}
+
+    <ul class="review-container">
+      {% for watch in watchers %}
+        <li class="review flex gap-2">
+          <img class="h-20 w-20 rounded-lg" src="data:image/png;base64,{{watch.image}}" alt="Why's it not working" />
+          <div class="w-full">
+            <span class="review-date">{{ watch.date }}</span>
+            <a class="review-commenter" href="{{ url_for('stocks.user_detail', username=watch.watcher.username) }}">
+              @{{ watch.watcher.username }}
+            </a>
+            <p class="review-content">Started watching when stock high was: {{ watch.high }} and stock low was: {{ watch.low }}</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="w-0 lg:w-96"></div>
+</div>
+<div class="h-20"></div>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends "header.html" %} {% block content %}
+{% if error %}
+    <b class="text-red-400" role="alert">
+        {{ error }}
+    </b>
+{% endif %}
+<div class="container mx-auto w-full md:w-2/3 lg:w-1/3 text-true-black">
+    {# User's Profile Picture #}
+    <img class="rounded-2xl" src="data:image/png;base64,{{ profile_pic }}" alt="image">
+    <h2 class="text-4xl font-bold my-4">{{user.username }}'s Stock Watchlist</h2>
+
+</div>
+<div class="container mx-auto w-full md:w-2/3 lg:w-1/3 text-true-black">
+    <h4 class="text-2xl">Number of Stocks: <b>{{ watchedStocks|length }}</b></h4>
+
+    <table>
+        <thead>
+            <tr class="bg-gray-700 text-true-black">
+                <th style="border: solid black">Name</th>
+                <th style="border: solid black">Symbol</th>
+                <th style="border: solid black">High</th>
+                <th style="border: solid black">Low</th>
+                <th style="border: solid black">Watch date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock in watchedStocks %}
+            <tr class="bg-gray-100 text-true-black">
+                <td style="border: solid black">{{ stock.name }}</td>
+                <td style="border: solid black">{{ stock.symbol }}</td>
+                <td style="border: solid black">{{ stock.high }}</td>
+                <td style="border: solid black">{{ stock.low }}</td>
+                <td style="border: solid black">{{ stock.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<div class="h-20"></div>
+{% endblock %}

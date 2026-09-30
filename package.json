@@ -1,0 +1,12 @@
+{
+  "name": "stock-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./flask_app/static/source.css -o ./flask_app/static/compiled.css --config ./flask_app/static/tailwind.config.js"
+  },
+  "description": "A stock watchlist web application built with Flask.",
+  "devDependencies": {
+    "tailwindcss": "3.4.1"
+  }
+}
